@@ -1,0 +1,35 @@
+image: maven
+
+stages:
+  - build
+  - test
+  - package
+  - deploy
+
+build_job:
+  stage: build
+  script:
+    - echo "compiling with Maven"
+    - "mvn compile"
+
+test_job:
+  stage: test
+  script:
+    - echo "testing"
+    - "mvn test"
+
+variables:
+  MAVEN_OPTS: -Dmaven.repo.local=.m2/repository
+
+cache:
+  paths:
+    - .m2/repository
+    - target
+
+package_job:
+  stage: package
+  artifacts:
+    paths:
+      - target/*.jar
+  script:
+    - "mvn package"
